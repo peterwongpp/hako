@@ -3,3 +3,7 @@ service: default
 env_variables:
   NODE_ENV: qa
 instance_class: F1
+handlers:
+  - url: /.*
+    secure: always
+    script: auto
