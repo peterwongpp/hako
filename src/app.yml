@@ -1,0 +1,5 @@
+runtime: nodejs12
+service: default
+env_variables:
+  NODE_ENV: qa
+instance_class: F1

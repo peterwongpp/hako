@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  hako:
+    build: .
+    command: npm run dev
+    volumes:
+      - ./src:/src
+    ports:
+      - 21011:3000
+    environment:
+      - GOOGLE_CLOUD_PROJECT=hako-310708
+      - GOOGLE_APPLICATION_CREDENTIALS=hako-310708-034cecbf3b1b.json
