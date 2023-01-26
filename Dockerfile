@@ -1,5 +1,5 @@
 FROM node:16
-LABEL maintainer peter.wong@tvb.com
+LABEL maintainer peter@peterwongpp.com
 
 #####################
 # Server level setup
@@ -9,10 +9,10 @@ LABEL maintainer peter.wong@tvb.com
 # App level setup
 ##################
 
-ENV APP_HOME /src
-RUN mkdir -p $APP_HOME
-COPY ./src/ $APP_HOME/
+WORKDIR /src
 
-WORKDIR $APP_HOME
-
+COPY ./package*.json .
 RUN npm install
+COPY . .
+
+CMD ["npm", "start"]

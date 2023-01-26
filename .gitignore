@@ -1,7 +1,9 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+/.vscode
+
 # dependencies
-/src/node_modules
+/node_modules
 /.pnp
 .pnp.js
 
@@ -9,11 +11,11 @@
 /coverage
 
 # next.js
-/src/.next/
-/src/out/
+/.next/
+/out/
 
 # production
-/src/build
+/build
 
 # misc
 .DS_Store
@@ -23,12 +25,14 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.pnpm-debug.log*
 
 # local env files
-/src/.env.local
-/src/.env.development.local
-/src/.env.test.local
-/src/.env.production.local
+.env*.local
 
 # vercel
 .vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
