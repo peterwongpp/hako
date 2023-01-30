@@ -1,32 +1,27 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-type ErrorType = {
-  message: string,
-  extra?: any,
-};
+import ApiResponseType from '@/types/ApiResponseType';
+import ChordType from '@/types/ChordType';
 
-type ApiResponse<BodyType> = {
-  code: string,
-  error?: ErrorType,
-  body?: BodyType,
-};
+import Chord from '@/models/Chord';
 
-type Chord = {
-  singers: string[],
-  songName: string,
-  path: string,
-};
-
-export default function handler(
+export default async function handler (
   req: NextApiRequest,
-  res: NextApiResponse<ApiResponse<Chord[]>>
+  res: NextApiResponse<ApiResponseType<ChordType[]>>
 ) {
-  // TODO: query chords from firestore.
-  const chords = [{
-    singers: ["abc"],
-    songName: "ooo",
-    path: "abc"
-  }];
+  let chords;
+  
+  try {
+    chords = await Chord.findAll();
+  } catch (error) {
+    return res.status(500).json({
+      code: '00000000',
+      error: {
+        message: 'Failed to retrieve chords.',
+        extra: error,
+      }
+    });
+  }
 
   res.status(200).json({
     code: 'success',
