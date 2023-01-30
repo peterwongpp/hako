@@ -21,11 +21,14 @@ export default function Home() {
     .then(res => res.json())
     .then((data) => {
       const chords = data.body;
-      const groupedBySingerNames: { [key: string]: [value?: ChordType] } = {};
+      const groupedBySingerNames: { [key: string]: [value: ChordType] } = {};
       chords.forEach((chord: ChordType) => {
         const singerNames = chord.singerNames.join(', ');
-        if (typeof groupedBySingerNames[singerNames] === 'undefined') { groupedBySingerNames[singerNames] = [] }
-        groupedBySingerNames[singerNames].push(chord);
+        if (typeof groupedBySingerNames[singerNames] === 'undefined') {
+          groupedBySingerNames[singerNames] = [chord];
+        } else {
+          groupedBySingerNames[singerNames].push(chord);
+        }
       });
       return groupedBySingerNames;
     })
