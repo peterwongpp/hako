@@ -55,16 +55,22 @@ export default function Home() {
     }
   };
 
+  const onChordClicked = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    const theFrame: HTMLIFrameElement = document.getElementById('theFrame') as HTMLIFrameElement;
+    theFrame.src = (e.target as HTMLAnchorElement).getAttribute('href') as string;
+  };
+
   return (
-    <Container>
+    <Container fluid>
       <Row className='justify-content-md-center'>
-        <Col xs={12} lg={8}>
+        <Col xs={4}>
           <Stack gap={3}>
             <Row>
-              <Col xs={2} md={1} className='d-flex justify-content-center align-self-center'>Hako</Col>
-              <Col xs md={11}>
+              <Col xs={2} className='d-flex justify-content-center align-self-center'>Hako</Col>
+              <Col xs={10}>
                 <Form>
-                  <Form.Control id='searchInput' placeholder='Song name...' onChange={onSearchInputChange}/>
+                  <Form.Control id='searchInput' placeholder='Search by song name...' onChange={onSearchInputChange}/>
                 </Form>
               </Col>
             </Row>
@@ -79,7 +85,7 @@ export default function Home() {
                           {chords[singerNames].map((chord) => {
                             return (
                               <li id={chord.id} key={chord.id}>
-                                <a href={chord.path} target='_blank' rel='noreferrer'>{chord.songName}</a>
+                                <a href={chord.path} target='_blank' rel='noreferrer' onClick={onChordClicked}>{chord.songName}</a>
                               </li>
                             )
                           })}
@@ -91,6 +97,9 @@ export default function Home() {
               </Col>
             </Row>
           </Stack>
+        </Col>
+        <Col xs={8}>
+          <iframe id='theFrame' width='100%' height='100%'></iframe>
         </Col>
       </Row>
     </Container>
