@@ -2446,7 +2446,7 @@ class Chord {
         id: doc.id,
         singerNames: chord.singerNames,
         songName: chord.songName,
-        path: chord.path,
+        path: chord.path, // TODO: if not start with http, then prefix it with cloud storage bucket's prefix (eg. /bucket/chords/{chord.path})
       };
     });
     return chords;

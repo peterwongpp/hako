@@ -11,4 +11,4 @@ services:
     environment:
       - PORT=8123
       - GOOGLE_CLOUD_PROJECT=hako-310708
-      - GOOGLE_APPLICATION_CREDENTIALS=hako-310708-b2a41b40a791.json
+      - GOOGLE_APPLICATION_CREDENTIALS=hako-310708-625eb042a004.json
