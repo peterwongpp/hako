@@ -3,6 +3,7 @@ import {
   Accordion,
   Button,
   Form,
+  InputGroup,
   ListGroup,
 } from 'react-bootstrap';
 import React, {useEffect, useState} from 'react';
@@ -48,6 +49,13 @@ export default function Admin() {
     }
   };
 
+  const clearSearch = (e: React.MouseEvent) => {
+    const searchInput = document.getElementById('searchInput') as HTMLInputElement;
+    searchInput.value = '';
+    searchInput.focus();
+    setChords(allChords);
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
@@ -75,7 +83,10 @@ export default function Admin() {
               <Col xs={2} className='d-flex justify-content-center align-self-center'>Hako</Col>
               <Col xs={10}>
                 <Form>
-                  <Form.Control id='searchInput' placeholder='Filter by song name / singers...' onChange={onSearchInputChange}/>
+                  <InputGroup>
+                    <Form.Control id='searchInput' placeholder='Filter by song name / singers...' onChange={onSearchInputChange}/>
+                    <Button variant='outline-secondary' onClick={clearSearch}>X</Button>
+                  </InputGroup>
                 </Form>
               </Col>
             </Row>

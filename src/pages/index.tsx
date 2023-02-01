@@ -1,6 +1,8 @@
 import {
   Container, Row, Col, Stack,
+  Button,
   Form,
+  InputGroup,
   ListGroup,
 } from 'react-bootstrap';
 import React, {useEffect, useState} from 'react';
@@ -61,6 +63,13 @@ export default function Home() {
     }
   };
 
+  const clearSearch = (e: React.MouseEvent) => {
+    const searchInput = document.getElementById('searchInput') as HTMLInputElement;
+    searchInput.value = '';
+    searchInput.focus();
+    setChords(allChords);
+  };
+
   const onChordClicked = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     const theFrame: HTMLIFrameElement = document.getElementById('theFrame') as HTMLIFrameElement;
@@ -76,7 +85,10 @@ export default function Home() {
               <Col xs={12} md={2} className='d-flex justify-content-center align-self-center'>Hako</Col>
               <Col xs={12} md={10}>
                 <Form>
-                  <Form.Control id='searchInput' placeholder='Filter by song name / singers...' onChange={onSearchInputChange}/>
+                  <InputGroup>
+                    <Form.Control id='searchInput' placeholder='Filter by song name / singers...' onChange={onSearchInputChange}/>
+                    <Button variant='outline-secondary' onClick={clearSearch}>X</Button>
+                  </InputGroup>
                 </Form>
               </Col>
             </Row>
