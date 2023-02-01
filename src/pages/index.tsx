@@ -67,11 +67,11 @@ export default function Home() {
   return (
     <Container fluid>
       <Row className='justify-content-md-center'>
-        <Col xs={4}>
+        <Col xs={3} md={4}>
           <Stack gap={3}>
             <Row>
-              <Col xs={2} className='d-flex justify-content-center align-self-center'>Hako</Col>
-              <Col xs={10}>
+              <Col xs={12} md={2} className='d-flex justify-content-center align-self-center'>Hako</Col>
+              <Col xs={12} md={10}>
                 <Form>
                   <Form.Control id='searchInput' placeholder='Search by song name...' onChange={onSearchInputChange}/>
                 </Form>
@@ -101,7 +101,7 @@ export default function Home() {
             </Row>
           </Stack>
         </Col>
-        <Col xs={8}>
+        <Col xs={9} md={8}>
           <iframe id='theFrame' width='100%' height='100%'></iframe>
         </Col>
       </Row>

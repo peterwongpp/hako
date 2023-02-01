@@ -2451,6 +2451,16 @@ class Chord {
     });
     return chords;
   }
+  
+  static async update(id: string, data: ChordType): Promise<ChordType | null> {
+    const chordDoc = firestore.collection('chords').doc(id);
+    const exists = (await chordDoc.get()).exists;
+    if (!exists) { return null; }
+
+    await chordDoc.update(data);
+
+    return data;
+  }
 }
 
 export default Chord;
