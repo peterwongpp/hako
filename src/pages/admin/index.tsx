@@ -3,18 +3,13 @@ import {
   Accordion,
   Button,
   Form,
-  InputGroup,
   ListGroup,
 } from 'react-bootstrap';
 import React, {useEffect, useState} from 'react';
-import { AccordionEventKey } from 'react-bootstrap/esm/AccordionContext';
 
-type ChordType = {
-  id?: string,
-  singerNames: string[],
-  songName: string,
-  path: string,
-};
+import FilterForm from '@/components/filter_form';
+
+import ChordType from '@/types/ChordType';
 
 export default function Admin() {
   const [allChords, setAllChords]: [ChordType[], Function] = useState([]);
@@ -29,39 +24,13 @@ export default function Admin() {
     })
     .catch((e) => console.log(e));
   }, []);
-  
-  const onSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const searchValue = e.target.value;
-    if (searchValue === '') {
-      setChords(allChords);
-    } else {
-      const re = new RegExp(searchValue, 'ig');
-      const newChords: ChordType[] = [];
-      allChords.forEach((chord) => {
-        if (
-          chord.songName.match(re)
-          || chord.singerNames.some((singerName) => singerName.match(re))
-        ) {
-          newChords.push(chord);
-        }
-      });
-      setChords(newChords);
-    }
-  };
-
-  const clearSearch = (e: React.MouseEvent) => {
-    const searchInput = document.getElementById('searchInput') as HTMLInputElement;
-    searchInput.value = '';
-    searchInput.focus();
-    setChords(allChords);
-  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
 
     const chordId = (form.elements.namedItem('id') as HTMLInputElement).value;
-    const data:ChordType = {
+    const data: ChordType = {
       songName: (form.elements.namedItem('songName') as HTMLInputElement).value,
       singerNames: (form.elements.namedItem('singerNamesCsv') as HTMLInputElement).value.split(/,/).map((v) => v.trim()),
       path: ((form.elements.namedItem('path') as HTMLInputElement).value),
@@ -82,12 +51,7 @@ export default function Admin() {
             <Row>
               <Col xs={2} className='d-flex justify-content-center align-self-center'>Hako</Col>
               <Col xs={10}>
-                <Form>
-                  <InputGroup>
-                    <Form.Control id='searchInput' placeholder='Filter by song name / singers...' onChange={onSearchInputChange}/>
-                    <Button variant='outline-secondary' onClick={clearSearch}>X</Button>
-                  </InputGroup>
-                </Form>
+                <FilterForm allChords={allChords} setChords={setChords}></FilterForm>
               </Col>
             </Row>
             <Row>

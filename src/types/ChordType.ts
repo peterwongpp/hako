@@ -1,5 +1,5 @@
 type ChordType = {
-  id: string,
+  id?: string,
   singerNames: string[],
   songName: string,
   path: string,

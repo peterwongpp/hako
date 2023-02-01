@@ -1,73 +1,44 @@
 import {
   Container, Row, Col, Stack,
-  Button,
-  Form,
-  InputGroup,
   ListGroup,
 } from 'react-bootstrap';
 import React, {useEffect, useState} from 'react';
 
-type ChordType = {
-  id: string,
-  singerNames: string[],
-  songName: string,
-  path: string,
-};
+import FilterForm from '@/components/filter_form';
+
+import ChordType from '@/types/ChordType';
+import GroupedChordType from '@/types/GroupedChordType';
 
 export default function Home() {
-  const [allChords, setAllChords]: [{[key: string]: [value: ChordType]}, Function] = useState({});
-  const [chords, setChords]: [{[key: string]: [value: ChordType]}, Function] = useState({});
+  const [allChords, setAllChords]: [ChordType[], Function] = useState([]);
+  const [chords, setChords]: [GroupedChordType, Function] = useState({});
 
   useEffect(() => {
     fetch('/api/chords')
     .then(res => res.json())
     .then((data) => {
       const chords = data.body;
-      const groupedBySingerNames: { [key: string]: [value: ChordType] } = {};
-      chords.forEach((chord: ChordType) => {
-        const singerNames = chord.singerNames.join(', ');
-        if (typeof groupedBySingerNames[singerNames] === 'undefined') {
-          groupedBySingerNames[singerNames] = [chord];
-        } else {
-          groupedBySingerNames[singerNames].push(chord);
-        }
-      });
-      return groupedBySingerNames;
+      const grouped = chordsFormatter(chords);
+      return [chords, grouped];
     })
-    .then(chords => {
+    .then(([chords, groupedChords]) => {
       setAllChords(chords);
-      setChords(chords);
+      setChords(groupedChords);
     })
     .catch((e) => console.log(e));
   }, []);
 
-  const onSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const searchValue = e.target.value;
-    if (searchValue === '') {
-      setChords(allChords);
-    } else {
-      const re = new RegExp(searchValue, 'ig');
-      const newChords: {[key: string]: [value?: ChordType]} = {};
-      Object.keys(allChords).forEach((singerNames) => {
-        allChords[singerNames].forEach((chord) => {
-          if (
-            chord.songName.match(re)
-            || chord.singerNames.some((singerName) => singerName.match(re))
-          ) {
-            if (typeof newChords[singerNames] === 'undefined') { newChords[singerNames] = []; }
-            newChords[singerNames].push(chord);
-          }
-        });
-      });
-      setChords(newChords);
-    }
-  };
-
-  const clearSearch = (e: React.MouseEvent) => {
-    const searchInput = document.getElementById('searchInput') as HTMLInputElement;
-    searchInput.value = '';
-    searchInput.focus();
-    setChords(allChords);
+  const chordsFormatter = (chords: ChordType[]): GroupedChordType => {
+    const grouped: GroupedChordType = {};
+    chords.forEach((chord: ChordType) => {
+      const singerNames = chord.singerNames.join(', ');
+      if (typeof grouped[singerNames] === 'undefined') {
+        grouped[singerNames] = [chord];
+      } else {
+        grouped[singerNames].push(chord);
+      }
+    });
+    return grouped;
   };
 
   const onChordClicked = (e: React.MouseEvent<HTMLElement>) => {
@@ -84,12 +55,7 @@ export default function Home() {
             <Row>
               <Col xs={12} md={2} className='d-flex justify-content-center align-self-center'>Hako</Col>
               <Col xs={12} md={10}>
-                <Form>
-                  <InputGroup>
-                    <Form.Control id='searchInput' placeholder='Filter by song name / singers...' onChange={onSearchInputChange}/>
-                    <Button variant='outline-secondary' onClick={clearSearch}>X</Button>
-                  </InputGroup>
-                </Form>
+                <FilterForm allChords={allChords} setChords={setChords} formatter={chordsFormatter}></FilterForm>
               </Col>
             </Row>
             <Row>
